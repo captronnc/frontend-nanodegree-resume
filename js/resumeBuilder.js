@@ -3,7 +3,7 @@
 var bio = {
 	"name": "Ronald Schaeffer",
 	"role": "Web Developer",
-	"contactInfo": {
+	"contacts": {
 		"mobile": "704-300-5618",
 		"email": "captronnc@yahoo.com",
 		"github": "captronnc",
@@ -42,13 +42,19 @@ var education = {
 	"schools": [
 		{
 			"name": "MSU",
-			"city": "Stark Vegas",
-			"major": "Technology Teacher Education"
+			"location": "Stark Vegas",
+			"degree": "BS",
+			"majors": "Technology Teacher Education",
+			"dates": "2014-16",
+			"url": "www.mstate.edu"
 		},
 		{
 			"name": "CCC",
-			"city": "Shelby",
-			"major":"Business Administration"
+			"location": "Shelby, NC",
+			"degree": "AA",
+			"majors": "Business Administration",
+			"dates": "1994-96",
+			"url": "www.clevelandcc.edu"
 		}
 	],
 
@@ -56,7 +62,7 @@ var education = {
 		{
 			"title": "Front-end Development",
 			"school": "Udacity",
-			"dates": "2016",
+			"date": "2016",
 			"url": "http://www."
 		}
 	]
@@ -68,19 +74,17 @@ var education = {
 var projects = {
 	"projects": [
 	{
-		"name": "WPI",
+		"title": "WPI",
 		"dates": "2012",
 		"description": "informational website",
-		"images": [
-			"image location", "image location"],
+		"images": [],
 		"url": "http://www.wpintergroup.org"
 	},
 	{
-		"name": "Portfolio",
+		"title": "Portfolio",
 		"dates": "2016",
 		"description": "portfolio website",
-		"images": [
-			"image location", "image location"],
+		"images": [],
 		"url": "http://www.http://captronnc.github.io/"
 	}
 	]
@@ -92,8 +96,25 @@ var formattedName =	HTMLheaderName.replace
 var formattedRole =	HTMLheaderRole.replace
 ("%data%", bio.role);
 
-$("#header").append(formattedName);
-$("#header").append(formattedRole);
+
+$("#header").prepend(formattedRole);
+$("#header").prepend(formattedName);
+
+function displayContacts() {
+
+		var formattedMobile = HTMLmobile.replace("%data%",bio.contacts.mobile);
+		var formattedEmail = HTMLemail.replace("%data%",bio.contacts.email);
+		var formattedGithub = HTMLgithub.replace("%data%",bio.contacts.github);
+		var formattedTwitter = HTMLtwitter.replace("%data%",bio.contacts.twitter);
+		var formattedLocation = HTMLlocation.replace("%data%",bio.contacts.location);
+
+		$("#topContacts, #footerContacts").append(formattedMobile, formattedEmail, formattedGithub, formattedTwitter, formattedLocation);
+}
+
+displayContacts();
+
+var formattedWelcomeMsg = HTMLwelcomeMsg.replace("%data%", bio.welcomeMessage);
+$("#header").append(formattedWelcomeMsg);
 
 var formattedPic = HTMLbioPic.replace("%data%", bio.bioPic)
 $("#header").append(formattedPic);
@@ -132,37 +153,29 @@ function displayWork() {
 
 displayWork();
 
-$(document).click(function(loc) {
-	var x = loc.pageX;
-	var y = loc.pageY;
+projects.display = function() {
+	for (project in projects.projects) {
+		$("#projects").append(HTMLprojectStart);
 
-	logClicks(x,y);
-});
+		var formattedTitle = HTMLprojectTitle.replace("%data%", projects.projects[project].title);
+		$(".project-entry:last").append(formattedTitle);
 
-function locationizer(work_obj) {
-    var locationArray = [];
+		var formattedDates = HTMLprojectDates.replace("%data%", projects.projects[project].dates);
+		$(".project-entry:last").append(formattedDates);
 
-    for(job in work.jobs) {
-    	var newLocation = work_obj.jobs[job].location;
-        locationArray.push(newLocation);
-    }
-    return locationArray;
-    }
+		var formattedDescription = HTMLprojectDescription.replace("%data%", projects.projects[project].description);
+		$(".project-entry:last").append(formattedDescription);
 
-console.log(locationizer(work));
+		if (projects.projects[project].images.length > 0) {
+			for (image in projects.projects[project].images) {
+				var formattedImage= HTMLprojectImage.replace("data%",projects.projects[project].images[image]);
+				$(".project-entry:last").append(formattedImage);
+			}
+		}
 
-
-function inName(name) {
-	var name = bio.name;
-	name = name.trim().split(" ");
-	console.log(name);
-	name[1] = name[1].toUpperCase();
-	name[0] = name[0].slice(0,1).toUpperCase() +
-		name[0].slice(1).toLowerCase();
-
-	return name[0]+ " " + name[1];
+	}
 }
+projects.display();
 
-$("#main").append(internationalizeButton);
+$("#mapDiv").append(googleMap);
 
-$('<button>Test</button>').click(function () { alert('hi'); });
